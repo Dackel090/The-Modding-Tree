@@ -43,7 +43,7 @@
     return result + truncated;
   };
 
-  var MAX_SIGNIFICANT_DIGITS = 17; //Maximum number of digits of precision to assume in Number
+  var MAX_SIGNIFICANT_DIGITS = 2; //Maximum number of digits of precision to assume in Number
 
   var EXP_LIMIT = 9e15; //If we're ABOVE this value, increase a layer. (9e15 is close to the largest integer that can fit in a Number.)
   

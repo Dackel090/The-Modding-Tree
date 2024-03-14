@@ -21,6 +21,11 @@ addLayer("p", {
     gainExp() { // Calculate the exponent on main currency from bonuses
         return new Decimal(1)
     },
+    passiveGeneration(){
+        
+        let generation = new Decimal(buyableEffect('p', 16))
+        return generation
+    },
     row: 0, // Row the layer is in on the tree (0 is the first row)
     hotkeys: [
         {key: "p", description: "P: Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
@@ -74,10 +79,10 @@ addLayer("p", {
 
     buyables: {
         16: {
-            cost(x) { return new Decimal(1).mul(x).pow(1.33) },
-            display() { return "increases the amount of virtual particles created by x" + format(tmp[this.layer].buyables[this.id].effect) },
+            cost(x) { return new Decimal(1).mul(x).pow(1.5) },
+            display() { return "Fabricates energy based on collectable energy. " + format(tmp[this.layer].buyables[this.id].effect) + "x being generated currently" + "<br>cost: " + this.cost()},
             canAfford() { return player[this.layer].points.gte(this.cost()) },
-            effect(x) { return new Decimal(1).add(getBuyableAmount(this.layer, this.id))
+            effect(x) { return new Decimal(x).pow(.5).div(3)
 
             },
             buy() {
