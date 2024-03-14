@@ -79,7 +79,7 @@ addLayer("p", {
 
     buyables: {
         16: {
-            cost(x) { return new Decimal(75).mul(x.mul(0.1)).pow(1.33) },
+            cost(x) { return new Decimal(new Decimal(100).add(new Decimal(x).pow(2.4))) },
             display() { return "Fabricates energy based on collectable energy. " + format(tmp[this.layer].buyables[this.id].effect) + "x being generated currently" + "<br>cost: " + this.cost()},
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             effect(x) { return new Decimal(x).pow(.5).div(3)
