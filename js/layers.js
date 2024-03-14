@@ -15,7 +15,7 @@ addLayer("p", {
     exponent: 0.5, // Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
-        if (hasUpgrade('p', 13)) mult = mult.times(upgradeEffect('p', 13))
+        if (hasUpgrade('p', 13)) mult = mult.times(upgradeEffect('p', 13)) 
         return mult
     },
     gainExp() { // Calculate the exponent on main currency from bonuses
@@ -35,7 +35,7 @@ addLayer("p", {
         },
         12: {
             title: "increased quantum foam density",
-            description: "increases virtual particle gain by space gain",
+            description: "increases virtual particle gain by energy",
             cost: new Decimal(10),  
             effect() {
                 return player[this.layer].points.add(1).pow(0.5)
@@ -45,7 +45,7 @@ addLayer("p", {
 
         13: {
             title: "antimatter matter annihilations",
-            description: "reduced space cost using virtual particles",
+            description: "reduced energy cost using virtual particles",
             cost: new Decimal(25),
             effect() {
                 return player.points.add(1).pow(0.2)
@@ -56,15 +56,17 @@ addLayer("p", {
         15: {
             title: "light atomic fission",
             description: "increases virtual particle gain by virtual particles",
-            cost: new Decimal(10000),
+            cost: new Decimal(1000),
             effect() {
-                return player.points.add(0).pow(0.075)
+                return player.points.add(1).pow(0.075)
             },
             effectDisplay() {return format(upgradeEffect(this.layer, this.id))+"x" },
         },
 
         14: {
             title: "elementary particle formation",
+            description: "unlocks fabricators",
+            cost: new Decimal(100)
         
         },
 
@@ -72,13 +74,19 @@ addLayer("p", {
 
     buyables: {
         16: {
-            cost(x) { return new Decimal(1).mul(x) },
-            display() { return "Blah" },
+            cost(x) { return new Decimal(1).mul(x).pow(1.33) },
+            display() { return "increases the amount of virtual particles created by x" + format(tmp[this.layer].buyables[this.id].effect) },
             canAfford() { return player[this.layer].points.gte(this.cost()) },
+            effect(x) { return new Decimal(1).add(getBuyableAmount(this.layer, this.id))
+
+            },
             buy() {
                 player[this.layer].points = player[this.layer].points.sub(this.cost())
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
             },
+            title(){
+                return format(getBuyableAmount(this.layer, this.id), 0) + " Proton Fabricators"
+            }
         },
     },
 
@@ -94,7 +102,7 @@ addLayer("p", {
                 ]
             },
             "Fabricators": {
-                unlocked: () => hasUpgrade('p', 11),
+                unlocked: () => hasUpgrade('p', 14),
                 content: [
                     ["blank", "16px"],
                     "buyables"
