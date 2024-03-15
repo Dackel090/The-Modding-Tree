@@ -29,7 +29,7 @@ addLayer("p", {
     },
     row: 0, // Row the layer is in on the tree (0 is the first row)
     hotkeys: [
-        {key: "p", description: "P: Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+        {key: "p", description: "P: Reset for energy", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
 
 
@@ -96,15 +96,16 @@ addLayer("p", {
             description: "increases virtual particle gain by energy and virtual particles",
             cost: new Decimal(75000),
             effect() {
-                return player.points.add(player[this.layer].points).add(1).pow(.02)
+                return player.points.add(player[this.layer].points).add(1).pow(.05).mul(1.5)
             },
+            effectDisplay(){return format(upgradeEffect(this.layer, this.id))+"x"},
         },
 
     },
 
     buyables: {
         16: {
-            cost(x) { return new Decimal(new Decimal(125).add(new Decimal(2.5).pow(new Decimal(x).mul(.75))))},
+            cost(x) { return new Decimal(new Decimal(125).add(new Decimal(2.5).pow(new Decimal(x).mul(.8)))).sub(1)},
             display() { return "Fabricates energy based on collectable energy. " + format(tmp[this.layer].buyables[this.id].effect) + "x being generated currently" + "<br>cost: " + this.cost()},
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             effect(x) { return new Decimal(x).pow(.4).div(10)
@@ -119,7 +120,7 @@ addLayer("p", {
             }
         },
         17: {
-            cost(x) { return new Decimal(1000).pow(new Decimal(x).mul(.33))},
+            cost(x) { return new Decimal(new Decimal(1000).add(new Decimal(4).pow(new Decimal(x)))).sub(1)},
             display(){ return "Fabricates energy based on collectable energy " + format(tmp[this.layer].buyables[this.id].effect)+"x being generated currently"+ "<br>cost:" + this.cost()},
             canAfford() {return player[this.layer].points.gte(this.cost())},
             effect(x) {return new Decimal(x).pow(.4).div(5)},
@@ -167,4 +168,46 @@ addLayer("p", {
     
 
     layerShown(){return true}
+})
+
+addLayer("f", {
+    name: "formation",
+    symbol: "f",
+    position: 1,
+    startData() { return {
+        unlocked: true,
+		points: new Decimal(0),
+    }},
+    color: "#52fadb",
+    requires: new Decimal(1e9), // Can be a function that takes requirement increases into account
+    resource: "matter", // Name of prestige currency
+    baseResource: "energy", // Name of resource prestige is based on
+    baseAmount() {return player.p.points}, // Get the current amount of baseResource
+    type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
+    exponent: 0.5, // Prestige currency exponent
+    gainMult() { // Calculate the multiplier for main currency from bonuses
+        mult = new Decimal(1)
+        return mult
+    },
+    gainExp() { // Calculate the exponent on main currency from bonuses
+        return new Decimal(1)
+    },
+    row: 1, // Row the layer is in on the tree (0 is the first row)
+    hotkeys: [
+        {key: "f", description: "F: Reset for matter", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+    ],
+
+    layerShown(){return true},
+    
+
+    milestones: {
+        0: {
+            requirementDescription: "1 Matter",
+            effectDescription: "Virtual Particle gain x2.5",
+            done(){
+                return player[this.layer].points.gte(1)
+            },
+        },
+    
+    },
 })
