@@ -85,17 +85,17 @@ addLayer("p", {
         },
 
         21: {
-            title: "hadron formation",
+            title: "light atomic fusion",
             description: "unlocks fabricators",
             cost: new Decimal(10000)
         
         },
         22: {
             title: "universal cooling",
-            description: "decreases fabricators' cost",
+            description: "increases virtual particle gain by energy and virtual particles",
             cost: new Decimal(100000),
             effect() {
-                return new Decimal(.99)
+                return player.points.add(player[this.layer].points).add(1).pow(.02)
             },
         },
 
@@ -103,7 +103,7 @@ addLayer("p", {
 
     buyables: {
         16: {
-            cost(x) { return new Decimal(new Decimal(125).add(new Decimal(x).pow(3))).mul(upgradeEffect('p', 22)) },
+            cost(x) { return new Decimal(new Decimal(125).add(new Decimal(2.5).pow(new Decimal(x).mul(.75))))},
             display() { return "Fabricates energy based on collectable energy. " + format(tmp[this.layer].buyables[this.id].effect) + "x being generated currently" + "<br>cost: " + this.cost()},
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             effect(x) { return new Decimal(x).pow(.5).div(10)

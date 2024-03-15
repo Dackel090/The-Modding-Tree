@@ -7,7 +7,7 @@ let modInfo = {
 
 	discordName: "",
 	discordLink: "",
-	initialStartPoints: new Decimal (10000000), // Used for hard resets and new players
+	initialStartPoints: new Decimal (0), // Used for hard resets and new players
 	offlineLimit: 10,  // In hours
 }
 
@@ -18,9 +18,9 @@ let VERSION = {
 }
 
 let changelog = `<h1>Changelog:</h1><br>
-	<h3>v0.0</h3><br>
-		- Added things.<br>
-		- Added stuff.`
+	<h3>v0.1</h3><br>
+		- started the game.<br>
+		- Added everything.`
 
 let winText = `Congratulations! You have reached the end and beaten this game, but for now...`
 
@@ -49,6 +49,7 @@ function getPointGen() {
 	if (hasUpgrade('p', 14)) gain = gain.times(upgradeEffect('p', 14))
 	if (hasUpgrade('p', 15)) gain = gain.times(upgradeEffect('p', 15))
 	if (hasUpgrade('p', 16)) gain = gain.times(3)
+	if (hasUpgrade('p', 22)) gain = gain.mul(upgradeEffect('p', 22))
 	
 	//gain = gain.times(buyableEffect("p", 16))
 	
@@ -60,12 +61,12 @@ function addedPlayerData() { return {
 }}
 
 // Display extra things at the top of the page
-var displayThings = [
+var displayThings = ["The current end of the game is e11 Virtual Particles"
 ]
 
 // Determines when the game "ends"
 function isEndgame() {
-	return player.points.gte(new Decimal("e280000000"))
+	return player.points.gte(new Decimal("e11"))
 }
 
 
