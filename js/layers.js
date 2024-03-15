@@ -24,6 +24,7 @@ addLayer("p", {
     passiveGeneration(){
         
         let generation = new Decimal(buyableEffect('p', 16))
+        generation = generation.add(buyableEffect('p', 17))
         return generation
     },
     row: 0, // Row the layer is in on the tree (0 is the first row)
@@ -63,7 +64,7 @@ addLayer("p", {
             description: "further increases virtual particle gain by energy",
             cost: new Decimal(100),
             effect(){
-                return player[this.layer].points.add(1).mul(2).pow(.33)
+                return player[this.layer].points.add(1).mul(2).pow(.5)
             },
             effectDisplay() {return format(upgradeEffect(this.layer, this.id))+'x'},
         },
@@ -71,16 +72,16 @@ addLayer("p", {
         15: {
             title: "elemtary particle formation",
             description: "increases virtual particle gain by virtual particles",
-            cost: new Decimal(900),
+            cost: new Decimal(750),
             effect() {
-                return player.points.add(1).pow(0.075)
+                return player.points.add(1).pow(0.08)
             },
             effectDisplay() {return format(upgradeEffect(this.layer, this.id))+"x" },
         },
         16: {
             title: "quark binding",
             description: "triples virtual particle output",
-            cost: new Decimal(500)
+            cost: new Decimal(250)
 
         },
 
@@ -106,7 +107,7 @@ addLayer("p", {
             cost(x) { return new Decimal(new Decimal(125).add(new Decimal(2.5).pow(new Decimal(x).mul(.75))))},
             display() { return "Fabricates energy based on collectable energy. " + format(tmp[this.layer].buyables[this.id].effect) + "x being generated currently" + "<br>cost: " + this.cost()},
             canAfford() { return player[this.layer].points.gte(this.cost()) },
-            effect(x) { return new Decimal(x).pow(.5).div(10)
+            effect(x) { return new Decimal(x).pow(.4).div(10)
 
             },
             buy() {
@@ -116,6 +117,19 @@ addLayer("p", {
             title(){
                 return format(getBuyableAmount(this.layer, this.id), 0) + " Proton Fabricators"
             }
+        },
+        17: {
+            cost(x) { return new Decimal(1000).pow(new Decimal(x).mul(.33))},
+            display(){ return "Fabriactes energy based on collectable energy" + format(tmp[this.layer].buyables[this.id].effect)+"x being generated currently"+ "<br>cost:" + this.cost()},
+            canAfford() {return player[this.layer].points.gte(this.cost())},
+            effect(x) {return new Decimal(x).pow(.4).div(5)},
+            buy() {
+                player[this.layer].points = player[this.layer].points.sub(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + " Nuetron Fabricators"
+            },
         },
     },
 
