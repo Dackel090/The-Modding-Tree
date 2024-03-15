@@ -53,13 +53,23 @@ addLayer("p", {
             description: "reduced energy cost using virtual particles",
             cost: new Decimal(25),
             effect() {
-                return player.points.add(1).pow(0.2)
+                return player.points.add(1).pow(0.1)
             },
             effectDisplay() {return format(upgradeEffect(this.layer, this.id))+"x" },
         },
 
+        14: {
+            title: "energy field excitations",
+            description: "further increases virtual particle gain by energy",
+            cost: new Decimal(120),
+            effect(){
+                return player[this.layer].points.add(1).mul(2).pow(.33)
+            },
+            effectDisplay() {return format(upgradeEffect(this.layer, this.id))+'x'},
+        },
+
         15: {
-            title: "light atomic fission",
+            title: "elemtary particle formation",
             description: "increases virtual particle gain by virtual particles",
             cost: new Decimal(1000),
             effect() {
@@ -67,22 +77,36 @@ addLayer("p", {
             },
             effectDisplay() {return format(upgradeEffect(this.layer, this.id))+"x" },
         },
+        16: {
+            title: "quark binding",
+            description: "triples virtual particle output",
+            cost: new Decimal(500)
 
-        14: {
-            title: "elementary particle formation",
+        },
+
+        21: {
+            title: "hadron formation",
             description: "unlocks fabricators",
-            cost: new Decimal(100)
+            cost: new Decimal(10000)
         
+        },
+        22: {
+            title: "universal cooling",
+            description: "decreases fabricators' cost",
+            cost: new Decimal(100000),
+            effect() {
+                return new Decimal(.99)
+            },
         },
 
     },
 
     buyables: {
         16: {
-            cost(x) { return new Decimal(new Decimal(100).add(new Decimal(x).pow(2.4))) },
+            cost(x) { return new Decimal(new Decimal(125).add(new Decimal(x).pow(3))).mul(upgradeEffect('p', 22)) },
             display() { return "Fabricates energy based on collectable energy. " + format(tmp[this.layer].buyables[this.id].effect) + "x being generated currently" + "<br>cost: " + this.cost()},
             canAfford() { return player[this.layer].points.gte(this.cost()) },
-            effect(x) { return new Decimal(x).pow(.5).div(3)
+            effect(x) { return new Decimal(x).pow(.5).div(10)
 
             },
             buy() {
@@ -101,13 +125,14 @@ addLayer("p", {
                 content: [
                     ["blank", "16px"],
                     ["row",[["upgrade", 11], ['upgrade', 12], ['upgrade', 13], ['upgrade', 14]]],
-                    ["row",[['upgrade', 15]]],
+                    ["row",[['upgrade', 16], ['upgrade', 15]]],
+                    ["row", [['upgrade', 21], ["upgrade", 22]]],
                     ["blank", "16px"],
 
                 ]
             },
             "Fabricators": {
-                unlocked: () => hasUpgrade('p', 14),
+                unlocked: () => hasUpgrade('p', 21),
                 content: [
                     ["blank", "16px"],
                     "buyables"
