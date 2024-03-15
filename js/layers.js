@@ -16,6 +16,7 @@ addLayer("p", {
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
         if (hasUpgrade('p', 13)) mult = mult.times(upgradeEffect('p', 13)) 
+        if (hasMilestone("f", 1)) mult = mult.times(player.f.points.pow(.67))
         return mult
     },
     gainExp() { // Calculate the exponent on main currency from bonuses
@@ -70,7 +71,7 @@ addLayer("p", {
         },
 
         15: {
-            title: "elemtary particle formation",
+            title: "elementary particle formation",
             description: "increases virtual particle gain by virtual particles",
             cost: new Decimal(750),
             effect() {
@@ -105,7 +106,7 @@ addLayer("p", {
 
     buyables: {
         16: {
-            cost(x) { return new Decimal(new Decimal(125).add(new Decimal(2.5).pow(new Decimal(x).mul(.8)))).sub(1)},
+            cost(x) { return new Decimal(new Decimal(125).mul(new Decimal(2).pow(new Decimal(x).mul(.8)))).sub(1)},
             display() { return "Fabricates energy based on collectable energy. " + format(tmp[this.layer].buyables[this.id].effect) + "x being generated currently" + "<br>cost: " + this.cost()},
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             effect(x) { return new Decimal(x).pow(.4).div(10)
@@ -120,8 +121,8 @@ addLayer("p", {
             }
         },
         17: {
-            cost(x) { return new Decimal(new Decimal(1000).add(new Decimal(4).pow(new Decimal(x)))).sub(1)},
-            display(){ return "Fabricates energy based on collectable energy " + format(tmp[this.layer].buyables[this.id].effect)+"x being generated currently"+ "<br>cost:" + this.cost()},
+            cost(x) { return new Decimal(new Decimal(1000).mul(new Decimal(3).pow(new Decimal(x))))},
+            display(){ return "Fabricates Energy based on collectable Energy " + format(tmp[this.layer].buyables[this.id].effect)+"x being generated currently"+ "<br>cost:" + this.cost()},
             canAfford() {return player[this.layer].points.gte(this.cost())},
             effect(x) {return new Decimal(x).pow(.4).div(5)},
             buy() {
@@ -129,7 +130,22 @@ addLayer("p", {
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
             },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + " Nuetron Fabricators"
+                return format(getBuyableAmount(this.layer, this.id), 0) + " Neutron Fabricators"
+            },
+        },
+        18: {
+            cost(x){ 
+                return new Decimal(new Decimal(250000).mul(new Decimal(4).pow(new Decimal(x))))
+            },
+            display() { return "Fabricates Energy based on collectable Energy " + format(tmp[this.layer].buyables[this.id].effect)+"x being generated currently"+"<br>cost: "+ this.cost()},
+            canAfford(){ return player[this.layer].points.gte(this.cost())},
+            effect(x){ return new Decimal(x).pow(.5).div(5)},
+            buy(){
+                player[this.layer].points = player[this.layer].points.sub(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + " Electron Orbital Fabricators"
             },
         },
     },
@@ -206,6 +222,14 @@ addLayer("f", {
             effectDescription: "Virtual Particle gain x2.5",
             done(){
                 return player[this.layer].points.gte(1)
+            },
+        },
+
+        1: {
+            requirementDescription: "3 Matter",
+            effectDescription: "Increases Energy gain by unspent matter",
+            done(){
+                return player[this.layer].points.gte(3)
             },
         },
     

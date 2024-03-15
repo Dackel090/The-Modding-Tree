@@ -62,12 +62,12 @@ function addedPlayerData() { return {
 }}
 
 // Display extra things at the top of the page
-var displayThings = ["The current end of the game is e11 Virtual Particles"
+var displayThings = ["The current end of the game is e110 Virtual Particles"
 ]
 
 // Determines when the game "ends"
 function isEndgame() {
-	return player.points.gte(new Decimal("e11"))
+	return player.points.gte(new Decimal("e110"))
 }
 
 
