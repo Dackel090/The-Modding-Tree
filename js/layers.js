@@ -61,7 +61,7 @@ addLayer("p", {
         14: {
             title: "energy field excitations",
             description: "further increases virtual particle gain by energy",
-            cost: new Decimal(120),
+            cost: new Decimal(100),
             effect(){
                 return player[this.layer].points.add(1).mul(2).pow(.33)
             },
@@ -71,7 +71,7 @@ addLayer("p", {
         15: {
             title: "elemtary particle formation",
             description: "increases virtual particle gain by virtual particles",
-            cost: new Decimal(1000),
+            cost: new Decimal(900),
             effect() {
                 return player.points.add(1).pow(0.075)
             },
@@ -87,13 +87,13 @@ addLayer("p", {
         21: {
             title: "light atomic fusion",
             description: "unlocks fabricators",
-            cost: new Decimal(10000)
+            cost: new Decimal(5000)
         
         },
         22: {
             title: "universal cooling",
             description: "increases virtual particle gain by energy and virtual particles",
-            cost: new Decimal(100000),
+            cost: new Decimal(75000),
             effect() {
                 return player.points.add(player[this.layer].points).add(1).pow(.02)
             },
