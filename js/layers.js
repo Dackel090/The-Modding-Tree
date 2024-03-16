@@ -26,6 +26,8 @@ addLayer("p", {
         
         let generation = new Decimal(buyableEffect('p', 16))
         generation = generation.add(buyableEffect('p', 17))
+        generation = generation.mul(buyableEffect('f', 13))
+        generation = generation.pow(buyableEffect('f', 14))
         return generation
     },
     row: 0, // Row the layer is in on the tree (0 is the first row)
@@ -87,7 +89,7 @@ addLayer("p", {
         },
 
         21: {
-            title: "light atomic fusion",
+            title: "electron stabilization",
             description: "unlocks energy fabricators",
             cost: new Decimal(5000)
         
@@ -205,6 +207,7 @@ addLayer("f", {
         mult = new Decimal(1)
         return mult
     },
+
     gainExp() { // Calculate the exponent on main currency from bonuses
         return new Decimal(1)
     },
@@ -214,6 +217,7 @@ addLayer("f", {
     ],
 
     layerShown(){return true},
+    branches:[['p', 1]],
     
 
     milestones: {
@@ -240,10 +244,17 @@ addLayer("f", {
             },
         },
         3:{
-            requirementDescription: "25 Matter",
+            requirementDescription: "20 Matter",
             effectDescription: "Unlocks basic elements",
             done(){
-                return player[this.layer].points.gte(25)
+                return player[this.layer].points.gte(20)
+            },
+        },
+        4:{
+            requirementDescription: "35 Matter",
+            effectDescription: "Unlocks a new layer",
+            done(){
+                return player[this.layer].points.gte(35)
             },
         },
     
@@ -252,7 +263,7 @@ addLayer("f", {
     buyables:{
         11:{
             cost(x){return new Decimal(x).add(1)},
-            display(){return "Increases Virtual Particle gain by amount owned"},
+            display(){return "Increases Virtual Particle gain by amount owned. " +"<br>" + format(tmp[this.layer].buyables[this.id].effect)+"x boost currently"+"<br>cost: "+ this.cost()},
             canAfford(){return player[this.layer].points.gte(this.cost())},
             effect(x){return new Decimal(x).add(1)},
             buy(){
@@ -260,9 +271,44 @@ addLayer("f", {
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
             },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + " Hydrogen-1"
+                return format(getBuyableAmount(this.layer, this.id), 0) + " Hydrogen 1"
             },
         },  
+        12:{
+            cost(x){return new Decimal(x).add(1)},
+            display(){return "Increases Virctual Particle gain by amount owned. " + "<br> ^" +format(tmp[this.layer].buyables[this.id].effect)+" boost currently"+"<br>cost: "+ this.cost()},
+            canAfford(){return player[this.layer].points.gte(this.cost())},
+            effect(x){return new Decimal(x).div(40).add(1)},
+            buy(){
+                player[this.layer].points = player[this.layer].points.sub(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+
+            },
+            title(){return format(getBuyableAmount(this.layer, this.id), 0) + " Hydrogen 2 (Deuterium)"},
+        },
+        13:{
+            cost(x){return new Decimal(x).mul(2).add(5)},
+            display(){return "Increases passive Energy gain by amount owned. " + "<br>" +format(tmp[this.layer].buyables[this.id].effect)+"x boost currently"+"<br>cost: "+ this.cost()},
+            canAfford(){return player[this.layer].points.gte(this.cost())},
+            effect(x){return new Decimal(x).add(1)},
+            buy(){
+                player[this.layer].points = player[this.layer].points.sub(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            title(){return format(getBuyableAmount(this.layer, this.id), 0) + " Helium 2"},
+        },
+        14:{
+            cost(x){return new Decimal(x).mul(2).add(5)},
+            display(){return "Increases passive Energy gain by amount owned. " + "<br> ^" +format(tmp[this.layer].buyables[this.id].effect)+" boost currently"+"<br>cost: "+ this.cost()},
+            canAfford(){return player[this.layer].points.gte(this.cost())},
+            effect(x){return new Decimal(x).div(50).add(1)},
+            buy(){
+                player[this.layer].points = player[this.layer].points.sub(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+
+            },
+            title(){return format(getBuyableAmount(this.layer, this.id), 0) + "  Helium 3"},
+        },
     },
 
     tabFormat: [
@@ -286,7 +332,8 @@ addLayer("f", {
                 unlocked: () => hasMilestone('f', 3),
                 content: [
                     ["blank", "16px"],
-                    "buyables"
+                    ["row",[['buyable', 11], ['buyable', 12]]],
+                    ["row",[["buyable", 13], ['buyable', 14]]],
                 ]
             },
         },
