@@ -139,7 +139,7 @@ addLayer("p", {
             },
             display() { return "Fabricates Energy based on collectable Energy " + format(tmp[this.layer].buyables[this.id].effect)+"x being generated currently"+"<br>cost: "+ this.cost()},
             canAfford(){ return player[this.layer].points.gte(this.cost())},
-            effect(x){ return new Decimal(x).pow(.5).div(5)},
+            effect(x){ return new Decimal(x).pow(.67).div(5)},
             buy(){
                 player[this.layer].points = player[this.layer].points.sub(this.cost())
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -199,8 +199,8 @@ addLayer("f", {
     resource: "matter", // Name of prestige currency
     baseResource: "energy", // Name of resource prestige is based on
     baseAmount() {return player.p.points}, // Get the current amount of baseResource
-    type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
-    exponent: 0.5, // Prestige currency exponent
+    type: "static", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
+    exponent: 1, // Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
         return mult
@@ -230,6 +230,13 @@ addLayer("f", {
             effectDescription: "Increases Energy gain by unspent matter",
             done(){
                 return player[this.layer].points.gte(3)
+            },
+        },
+        2:{
+            requirementDescription: "10 matter",
+            effectDescription: "Increases Virtual Particle gain by amount of Fabricators owned",
+            done(){
+                return player[this.layer].points.gte(10)
             },
         },
     
