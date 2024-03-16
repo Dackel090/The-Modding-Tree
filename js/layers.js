@@ -88,7 +88,7 @@ addLayer("p", {
 
         21: {
             title: "light atomic fusion",
-            description: "unlocks fabricators",
+            description: "unlocks energy fabricators",
             cost: new Decimal(5000)
         
         },
@@ -233,12 +233,64 @@ addLayer("f", {
             },
         },
         2:{
-            requirementDescription: "10 matter",
+            requirementDescription: "10 Matter",
             effectDescription: "Increases Virtual Particle gain by amount of Fabricators owned",
             done(){
                 return player[this.layer].points.gte(10)
             },
         },
+        3:{
+            requirementDescription: "25 Matter",
+            effectDescription: "Unlocks basic elements",
+            done(){
+                return player[this.layer].points.gte(25)
+            },
+        },
     
     },
+
+    buyables:{
+        11:{
+            cost(x){return new Decimal(x).add(1)},
+            display(){return "Increases Virtual Particle gain by amount owned"},
+            canAfford(){return player[this.layer].points.gte(this.cost())},
+            effect(x){return new Decimal(x).add(1)},
+            buy(){
+                player[this.layer].points = player[this.layer].points.sub(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + " Hydrogen-1"
+            },
+        },  
+    },
+
+    tabFormat: [
+        "main-display",
+        "prestige-button",
+        ["blank", "25px"],
+        ["blank", "15px"],
+        ["microtabs", "stuff"],
+        ["blank", "35px"],
+    ],
+    microtabs: {
+        stuff: {
+            "Milestones": {
+                content: [
+                    ["blank", "16px"],
+                    "milestones"
+
+                ]
+            },
+            "Elements": {
+                unlocked: () => hasMilestone('f', 3),
+                content: [
+                    ["blank", "16px"],
+                    "buyables"
+                ]
+            },
+        },
+        
+    },
+
 })
