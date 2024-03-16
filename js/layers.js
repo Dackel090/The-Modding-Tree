@@ -17,6 +17,7 @@ addLayer("p", {
         mult = new Decimal(1)
         if (hasUpgrade('p', 13)) mult = mult.times(upgradeEffect('p', 13)) 
         if (hasMilestone("f", 1)) mult = mult.times(player.f.points.pow(.67))
+        if (hasMilestone('p', 1)) mult = mult.times(1.1)
         return mult
     },
 
@@ -75,13 +76,13 @@ addLayer("p", {
         23:{
             title: "4 universal forces",
             description: "unlocks milestones for this layer",
-            cost: new Decimal(100)
+            cost: new Decimal(120)
         },  
 
         14: {
             title: "energy field excitations",
             description: "further increases virtual particle gain by energy",
-            cost: new Decimal(125),
+            cost: new Decimal(75),
             effect(){
                 return player[this.layer].points.add(1).mul(2).pow(.5)
             },
@@ -100,7 +101,7 @@ addLayer("p", {
         16: {
             title: "quark binding",
             description: "triples virtual particle output",
-            cost: new Decimal(375)
+            cost: new Decimal(250)
 
         },
 
@@ -172,21 +173,28 @@ addLayer("p", {
             requirementDescription: "500 Energy - Weak Force",
             effectDescription: "Virtual Particle gain ^1.1",
             done(){
-                return player[this.layer].points.gte(250)
+                return player[this.layer].points.gte(500)
             },
         },
         1:{
             requirementDescription: "100000 Energy - Strong Force",
-            effectDescription: "Unlocks a new layer",
+            effectDescription: "Increases Energy gain",
             done(){
                 return player[this.layer].points.gte(100000)
             },
         },
         2:{
-            requirementDescription: "1e10 Energy - Electromagnetic Force",
-            effectDescription: "",
+            requirementDescription: "5e10 Energy - Electromagnetic Force",
+            effectDescription: "Decreases the cost requirement for matter",
             done(){
-                return player[this.layer].points.gte(1e10)
+                return player[this.layer].points.gte(5e10)
+            },
+        },
+        3:{
+            requirementDescription: "1e21 Energy - Gravitational Force",
+            effectDescription: "Unlocks a new layer",
+            done(){
+                return player[this.layer].points.gte(1e21)
             },
         },
     },
@@ -196,8 +204,8 @@ addLayer("p", {
             "Upgrades": {
                 content: [
                     ["blank", "16px"],
-                    ["row",[["upgrade", 11], ['upgrade', 12], ['upgrade', 13], ['upgrade', 23]]],
-                    ["row",[['upgrade', 14], ['upgrade', 16], ['upgrade', 15]]],
+                    ["row",[["upgrade", 11], ['upgrade', 12], ['upgrade', 13], ['upgrade', 14]]],
+                    ["row",[['upgrade', 23], ['upgrade', 16], ['upgrade', 15]]],
                     ["row", [['upgrade', 21], ["upgrade", 22]]],
                     ["blank", "16px"],
 
@@ -253,6 +261,7 @@ addLayer("f", {
     exponent: 1, // Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
+        if (hasMilestone('p', 2)) mult = mult.times(1.1)
         return mult
     },
 
