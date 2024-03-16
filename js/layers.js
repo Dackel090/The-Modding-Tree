@@ -19,9 +19,20 @@ addLayer("p", {
         if (hasMilestone("f", 1)) mult = mult.times(player.f.points.pow(.67))
         return mult
     },
+
+    
+    doReset(resettingLayer) {
+        let keep = [];
+        if (hasMilestone("f", 4) && resettingLayer == "f")
+            keep.push("upgrades")
+        if (hasMilestone("f", 4) && resettingLayer == "p")
+            keep.push("upgrades")
+    },
+
     gainExp() { // Calculate the exponent on main currency from bonuses
         return new Decimal(1)
     },
+
     passiveGeneration(){
         
         let generation = new Decimal(buyableEffect('p', 16))
@@ -55,17 +66,22 @@ addLayer("p", {
         13: {
             title: "antimatter matter annihilations",
             description: "reduced energy cost using virtual particles",
-            cost: new Decimal(25),
+            cost: new Decimal(20),
             effect() {
                 return player.points.add(1).pow(0.1)
             },
             effectDisplay() {return format(upgradeEffect(this.layer, this.id))+"x" },
         },
+        23:{
+            title: "4 universal forces",
+            description: "unlocks milestones for this layer",
+            cost: new Decimal(100)
+        },  
 
         14: {
             title: "energy field excitations",
             description: "further increases virtual particle gain by energy",
-            cost: new Decimal(100),
+            cost: new Decimal(125),
             effect(){
                 return player[this.layer].points.add(1).mul(2).pow(.5)
             },
@@ -75,7 +91,7 @@ addLayer("p", {
         15: {
             title: "elementary particle formation",
             description: "increases virtual particle gain by virtual particles",
-            cost: new Decimal(750),
+            cost: new Decimal(1000),
             effect() {
                 return player.points.add(1).pow(0.08)
             },
@@ -84,7 +100,7 @@ addLayer("p", {
         16: {
             title: "quark binding",
             description: "triples virtual particle output",
-            cost: new Decimal(250)
+            cost: new Decimal(375)
 
         },
 
@@ -151,18 +167,50 @@ addLayer("p", {
             },
         },
     },
+    milestones:{
+        0: {
+            requirementDescription: "500 Energy - Weak Force",
+            effectDescription: "Virtual Particle gain ^1.1",
+            done(){
+                return player[this.layer].points.gte(250)
+            },
+        },
+        1:{
+            requirementDescription: "100000 Energy - Strong Force",
+            effectDescription: "Unlocks a new layer",
+            done(){
+                return player[this.layer].points.gte(100000)
+            },
+        },
+        2:{
+            requirementDescription: "1e10 Energy - Electromagnetic Force",
+            effectDescription: "",
+            done(){
+                return player[this.layer].points.gte(1e10)
+            },
+        },
+    },
 
     microtabs: {
         stuff: {
             "Upgrades": {
                 content: [
                     ["blank", "16px"],
-                    ["row",[["upgrade", 11], ['upgrade', 12], ['upgrade', 13], ['upgrade', 14]]],
-                    ["row",[['upgrade', 16], ['upgrade', 15]]],
+                    ["row",[["upgrade", 11], ['upgrade', 12], ['upgrade', 13], ['upgrade', 23]]],
+                    ["row",[['upgrade', 14], ['upgrade', 16], ['upgrade', 15]]],
                     ["row", [['upgrade', 21], ["upgrade", 22]]],
                     ["blank", "16px"],
 
                 ]
+            },
+
+            "Milestones":{
+                unlocked: () => hasUpgrade('p', 23),
+                content: [
+                    ["blank", "16px"],
+                    "milestones"
+                ]
+
             },
             "Fabricators": {
                 unlocked: () => hasUpgrade('p', 21),
@@ -208,6 +256,8 @@ addLayer("f", {
         return mult
     },
 
+
+
     gainExp() { // Calculate the exponent on main currency from bonuses
         return new Decimal(1)
     },
@@ -252,7 +302,7 @@ addLayer("f", {
         },
         4:{
             requirementDescription: "35 Matter",
-            effectDescription: "Unlocks a new layer",
+            effectDescription: "Keep Energy upgrades on collecting energy",
             done(){
                 return player[this.layer].points.gte(35)
             },
