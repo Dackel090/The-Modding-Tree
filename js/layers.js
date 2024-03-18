@@ -21,13 +21,12 @@ addLayer("p", {
         return mult
     },
 
-    
     doReset(resettingLayer) {
         let keep = [];
         if (hasMilestone("f", 4) && resettingLayer == "f")
             keep.push("upgrades")
-        if (hasMilestone("f", 4) && resettingLayer == "p")
-            keep.push("upgrades")
+        if (layers[resettingLayer].row > this.row)
+            layerDataReset("p", keep)
     },
 
     gainExp() { // Calculate the exponent on main currency from bonuses
