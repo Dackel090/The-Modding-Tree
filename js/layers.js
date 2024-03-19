@@ -403,7 +403,7 @@ addLayer("f", {
 })
 
 addLayer("g", {
-    name: "formation",
+    name: "gravity",
     symbol: "g",
     position: 2,
     startData() { return {
@@ -412,7 +412,7 @@ addLayer("g", {
     }},
     color: "#452a85",
     requires: new Decimal(1e21), // Can be a function that takes requirement increases into account
-    resource: "matter", // Name of prestige currency
+    resource: "gravity", // Name of prestige currency
     baseResource: "energy", // Name of resource prestige is based on
     baseAmount() {return player.p.points}, // Get the current amount of baseResource
     type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
@@ -427,11 +427,45 @@ addLayer("g", {
     },
     row: 1, // Row the layer is in on the tree (0 is the first row)
     hotkeys: [
-        {key: "g", description: "g: Reset for gravity", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+        {key: "g", description: "G: Reset for gravity", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
 
     layerShown(){
         return hasMilestone('p', 3) || this.layer.points > 0
     },
     branches:[['p', 1]],
+
+    upgrades: {
+        11:{
+            title: "gravity well",
+            description: "increases virtual particle gain by gravity",
+            cost: new Decimal(3),  
+            effect() {
+                return player[this.layer].points.add(1).pow(0.25)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" },
+        },
+
+        12:{
+            title: "gravitational waves",
+            description: "reduces the cost of matter by points",
+            cost: new Decimal(10),
+            effect(){
+                return new Decimal(1).sub(player.points.pow(.009).sub(1))
+            },
+            effectDisplay(){return format(upgradeEffect(this.layer, this.id))+"x"},
+        },
+             
+    },
+
+    tabFormat: [
+        "main-display",
+        "prestige-button",
+        ["blank", "25px"],
+        ["blank", "15px"],
+        ["microtabs", "stuff"],
+        ["blank", "35px"],
+    ],
+
+
 })

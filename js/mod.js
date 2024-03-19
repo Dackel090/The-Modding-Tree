@@ -13,13 +13,15 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.1.1",
-	name: "Start of Nothing",
+	num: "0.2.0",
+	name: "Start of Everything",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
-	<h3>v0.1.1</h3><br>
-		- started the game.<br>
+	<h3>v0.2.0</h3><br>
+		- expansion and formation are completed.<br>
+		- formation layer milestone 4 bug fixed. <br>
+		- gravity layer added, not completed. <br>
 		- Added everything.`
 
 let winText = `Congratulations! You have reached the end and beaten this game, but for now...`
