@@ -25,6 +25,8 @@ addLayer("p", {
         let keep = [];
         if (hasMilestone("f", 4) && resettingLayer == "f")
             keep.push("upgrades")
+        if (hasMilestone("f", 4) && resettingLayer == "g")
+            keep.push("upgrades")
         if (layers[resettingLayer].row > this.row)
             layerDataReset("p", keep)
     },
@@ -257,10 +259,10 @@ addLayer("f", {
     baseResource: "energy", // Name of resource prestige is based on
     baseAmount() {return player.p.points}, // Get the current amount of baseResource
     type: "static", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
-    exponent: 1, // Prestige currency exponent
+    exponent: 1.1, // Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
-        if (hasMilestone('p', 2)) mult = mult.times(1.1)
+        if (hasMilestone('p', 2)) mult = mult.times(.9)
         return mult
     },
 
@@ -398,4 +400,38 @@ addLayer("f", {
         
     },
 
+})
+
+addLayer("g", {
+    name: "formation",
+    symbol: "g",
+    position: 2,
+    startData() { return {
+        unlocked: false,
+		points: new Decimal(0),
+    }},
+    color: "#452a85",
+    requires: new Decimal(1e21), // Can be a function that takes requirement increases into account
+    resource: "matter", // Name of prestige currency
+    baseResource: "energy", // Name of resource prestige is based on
+    baseAmount() {return player.p.points}, // Get the current amount of baseResource
+    type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
+    exponent: 1, // Prestige currency exponent
+    gainMult() { // Calculate the multiplier for main currency from bonuses
+        mult = new Decimal(1)
+        return mult
+    },
+
+    gainExp() { // Calculate the exponent on main currency from bonuses
+        return new Decimal(1)
+    },
+    row: 1, // Row the layer is in on the tree (0 is the first row)
+    hotkeys: [
+        {key: "g", description: "g: Reset for gravity", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+    ],
+
+    layerShown(){
+        return hasMilestone('p', 3) || this.layer.points > 0
+    },
+    branches:[['p', 1]],
 })
