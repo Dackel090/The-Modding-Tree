@@ -39,6 +39,7 @@ addLayer("p", {
         
         let generation = new Decimal(buyableEffect('p', 16))
         generation = generation.add(buyableEffect('p', 17))
+        generation = generation.add(buyableEffect('p', 18))
         generation = generation.mul(buyableEffect('f', 13))
         generation = generation.pow(buyableEffect('f', 14))
         return generation
@@ -126,7 +127,7 @@ addLayer("p", {
 
     buyables: {
         16: {
-            cost(x) { return new Decimal(new Decimal(125).mul(new Decimal(2).pow(new Decimal(x).mul(.8)))).sub(1)},
+            cost(x) { return new Decimal(new Decimal(125).mul(new Decimal(2).pow(new Decimal(x)))).pow(1.1)},
             display() { return "Fabricates energy based on collectable energy. " + format(tmp[this.layer].buyables[this.id].effect) + "x being generated currently" + "<br>cost: " + this.cost()},
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             effect(x) { return new Decimal(x).pow(.4).div(10)
@@ -141,7 +142,7 @@ addLayer("p", {
             }
         },
         17: {
-            cost(x) { return new Decimal(new Decimal(1000).mul(new Decimal(3).pow(new Decimal(x))))},
+            cost(x) { return new Decimal(new Decimal(1000).mul(new Decimal(3).pow(new Decimal(x).mul(2)))).pow(1.3)},
             display(){ return "Fabricates Energy based on collectable Energy " + format(tmp[this.layer].buyables[this.id].effect)+"x being generated currently"+ "<br>cost:" + this.cost()},
             canAfford() {return player[this.layer].points.gte(this.cost())},
             effect(x) {return new Decimal(x).pow(.4).div(5)},
@@ -155,7 +156,7 @@ addLayer("p", {
         },
         18: {
             cost(x){ 
-                return new Decimal(new Decimal(250000).mul(new Decimal(4).pow(new Decimal(x))))
+                return new Decimal(new Decimal(250000).mul(new Decimal(5).pow(new Decimal(x).mul(2)))).pow(1.2)
             },
             display() { return "Fabricates Energy based on collectable Energy " + format(tmp[this.layer].buyables[this.id].effect)+"x being generated currently"+"<br>cost: "+ this.cost()},
             canAfford(){ return player[this.layer].points.gte(this.cost())},
@@ -416,7 +417,7 @@ addLayer("g", {
     baseResource: "energy", // Name of resource prestige is based on
     baseAmount() {return player.p.points}, // Get the current amount of baseResource
     type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
-    exponent: .5, // Prestige currency exponent
+    exponent: .25, // Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
         return mult
@@ -431,7 +432,7 @@ addLayer("g", {
     ],
 
     layerShown(){
-        return hasMilestone('p', 3) || this.layer.points > 0
+        return hasMilestone('p', 3) || this.layer.points > 0 || hasMilestone(this.layer, 0)
     },
     branches:[['p', 1]],
 
@@ -439,9 +440,9 @@ addLayer("g", {
         11:{
             title: "gravity well",
             description: "increases virtual particle gain by gravity",
-            cost: new Decimal(3),  
+            cost: new Decimal(10),  
             effect() {
-                return player[this.layer].points.add(1).pow(0.25)
+                return player[this.layer].points.add(1).pow(0.1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" },
         },
@@ -449,13 +450,43 @@ addLayer("g", {
         12:{
             title: "gravitational waves",
             description: "reduces the cost of matter by points",
-            cost: new Decimal(10),
+            cost: new Decimal(1000),
             effect(){
-                return new Decimal(1).sub(player.points.pow(.009).sub(1))
+                return new Decimal(1).sub(player.points.pow(.009).sub(player.points.pow(.0091)))
             },
             effectDisplay(){return format(upgradeEffect(this.layer, this.id))+"x"},
         },
              
+    },
+
+    milestones:{
+        0: {
+            requirementDescription: "1 Gravity",
+            effectDescription: "keep this layer unlcocked when reseting",
+            done(){
+                return player[this.layer].points.gte(1)
+            },
+        },
+    },
+    microtabs: {
+        stuff: {
+
+            "Upgrades": {
+                content: [
+                    ["blank", "16px"],
+                    ["row",[['upgrade', 11], ['upgrade', 12]]],
+                    ["blank", "16px"],
+                ]
+            },
+            "Milestones": {
+                content: [
+                    ["blank", "16px"],
+                    "milestones"
+
+                ]
+            },
+        },
+        
     },
 
     tabFormat: [
