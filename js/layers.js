@@ -69,14 +69,14 @@ addLayer("p", {
             description: "reduced energy cost using virtual particles",
             cost: new Decimal(20),
             effect() {
-                return player.points.add(1).pow(0.1)
+                return player.points.add(1).pow(0.09)
             },
             effectDisplay() {return format(upgradeEffect(this.layer, this.id))+"x" },
         },
         23:{
             title: "4 universal forces",
             description: "unlocks milestones for this layer",
-            cost: new Decimal(120)
+            cost: new Decimal(250)
         },  
 
         14: {
@@ -101,7 +101,7 @@ addLayer("p", {
         16: {
             title: "quark binding",
             description: "triples virtual particle output",
-            cost: new Decimal(250)
+            cost: new Decimal(120)
 
         },
 
@@ -205,7 +205,7 @@ addLayer("p", {
                 content: [
                     ["blank", "16px"],
                     ["row",[["upgrade", 11], ['upgrade', 12], ['upgrade', 13], ['upgrade', 14]]],
-                    ["row",[['upgrade', 23], ['upgrade', 16], ['upgrade', 15]]],
+                    ["row",[['upgrade', 16], ['upgrade', 23], ['upgrade', 15]]],
                     ["row", [['upgrade', 21], ["upgrade", 22]]],
                     ["blank", "16px"],
 
@@ -262,6 +262,7 @@ addLayer("f", {
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
         if (hasMilestone('p', 2)) mult = mult.times(.9)
+        if (hasMilestone('g', 0)) mult = mult.times(.9)
         return mult
     },
 
@@ -415,7 +416,7 @@ addLayer("g", {
     baseResource: "energy", // Name of resource prestige is based on
     baseAmount() {return player.p.points}, // Get the current amount of baseResource
     type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
-    exponent: .25, // Prestige currency exponent
+    exponent: .2, // Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
         return mult
@@ -438,7 +439,7 @@ addLayer("g", {
         11:{
             title: "gravity well",
             description: "increases virtual particle gain by gravity",
-            cost: new Decimal(10),  
+            cost: new Decimal(100),  
             effect() {
                 return player[this.layer].points.add(1).pow(0.1)
             },
@@ -448,7 +449,7 @@ addLayer("g", {
         12:{
             title: "gravitational waves",
             description: "reduces the cost of matter by points",
-            cost: new Decimal(1000),
+            cost: new Decimal(10000),
             effect(){
                 return new Decimal(1).sub(player.points.pow(.009).sub(player.points.pow(.0091)))
             },
@@ -460,9 +461,16 @@ addLayer("g", {
     milestones:{
         0: {
             requirementDescription: "1 Gravity",
-            effectDescription: "keep this layer unlcocked when reseting",
+            effectDescription: "Decreases Matter cost",
             done(){
                 return player[this.layer].points.gte(1)
+            },
+        },
+        1:{
+            requirementDescription: "100 Gravity",
+            effectDescription: "Keep Energy upgrades on Gravity reset",
+            done(){
+                return player[this.layer].points.gte(100)
             },
         },
     },
