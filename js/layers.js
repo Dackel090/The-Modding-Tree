@@ -25,8 +25,11 @@ addLayer("p", {
         let keep = [];
         if (hasMilestone("f", 4) && resettingLayer == "f")
             keep.push("upgrades")
+        if (hasMilestone('g', 1) && resettingLayer == "g")
+            keep.push("upgrades") 
         if (layers[resettingLayer].row > this.row)
             layerDataReset("p", keep)
+
     },
 
     gainExp() { // Calculate the exponent on main currency from bonuses
@@ -263,6 +266,7 @@ addLayer("f", {
         mult = new Decimal(1)
         if (hasMilestone('p', 2)) mult = mult.times(.9)
         if (hasMilestone('g', 0)) mult = mult.times(.9)
+        if (hasUpgrade('g', 12)) mult = mult.times(upgradeEffect("g", 12))
         return mult
     },
 
@@ -335,7 +339,7 @@ addLayer("f", {
             },
         },  
         12:{
-            cost(x){return new Decimal(x).add(1)},
+            cost(x){return new Decimal(x).add((x.pow(.5)))},
             display(){return "Increases Virctual Particle gain by amount owned. " + "<br> ^" +format(tmp[this.layer].buyables[this.id].effect)+" boost currently"+"<br>cost: "+ this.cost()},
             canAfford(){return player[this.layer].points.gte(this.cost())},
             effect(x){return new Decimal(x).div(25).add(1)},
@@ -451,7 +455,7 @@ addLayer("g", {
             description: "reduces the cost of matter by points",
             cost: new Decimal(10000),
             effect(){
-                return new Decimal(1).sub(player.points.pow(.009).sub(player.points.pow(.0091)))
+                return new Decimal(player.points.pow(.025).div(10))
             },
             effectDisplay(){return format(upgradeEffect(this.layer, this.id))+"x"},
         },
