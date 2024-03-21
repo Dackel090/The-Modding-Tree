@@ -55,14 +55,14 @@ addLayer("p", {
         11: {
             title: "quantum fluctuations",
             description: "doubles virtual particle output",
-            cost: new Decimal(5),
+            cost: new Decimal(3),
         },
         12: {
             title: "increased quantum foam density",
             description: "increases virtual particle gain by energy",
-            cost: new Decimal(10),  
+            cost: new Decimal(5),  
             effect() {
-                return player[this.layer].points.add(1).pow(0.2)
+                return player[this.layer].points.add(1).pow(0.33)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
         },
@@ -70,7 +70,7 @@ addLayer("p", {
         13: {
             title: "antimatter matter annihilations",
             description: "reduced energy cost using virtual particles",
-            cost: new Decimal(20),
+            cost: new Decimal(15),
             effect() {
                 return player.points.add(1).pow(0.09)
             },
@@ -85,7 +85,7 @@ addLayer("p", {
         14: {
             title: "energy field excitations",
             description: "further increases virtual particle gain by energy",
-            cost: new Decimal(75),
+            cost: new Decimal(50),
             effect(){
                 return player[this.layer].points.pow(.25).div(1.5).add(1)
             },
@@ -95,7 +95,7 @@ addLayer("p", {
         15: {
             title: "elementary particle formation",
             description: "increases virtual particle gain by virtual particles",
-            cost: new Decimal(1000),
+            cost: new Decimal(750),
             effect() {
                 return player.points.add(1).pow(0.075)
             },
@@ -104,20 +104,20 @@ addLayer("p", {
         16: {
             title: "quark binding",
             description: "triples virtual particle output",
-            cost: new Decimal(120)
+            cost: new Decimal(100)
 
         },
 
         21: {
             title: "electron stabilization",
             description: "unlocks energy fabricators",
-            cost: new Decimal(5000)
+            cost: new Decimal(3000)
         
         },
         22: {
             title: "universal cooling",
             description: "increases virtual particle gain by energy and virtual particles",
-            cost: new Decimal(75000),
+            cost: new Decimal(66000),
             effect() {
                 return player.points.add(player[this.layer].points).add(1).pow(.05).mul(1.5)
             },
@@ -128,7 +128,7 @@ addLayer("p", {
 
     buyables: {
         16: {
-            cost(x) { return new Decimal(new Decimal(125).mul(new Decimal(2).pow(new Decimal(x)))).pow(1.1)},
+            cost(x) { return new Decimal(new Decimal(100).mul(new Decimal(2).pow(new Decimal(x))))},
             display() { return "Fabricates energy based on collectable energy. " + format(tmp[this.layer].buyables[this.id].effect) + "x being generated currently" + "<br>cost: " + this.cost()},
             canAfford() { return player[this.layer].points.gte(this.cost()) },
             effect(x) { return new Decimal(x).pow(.4).div(10)
@@ -143,7 +143,7 @@ addLayer("p", {
             }
         },
         17: {
-            cost(x) { return new Decimal(new Decimal(1000).mul(new Decimal(3).pow(new Decimal(x).mul(2)))).pow(1.3)},
+            cost(x) { return new Decimal(new Decimal(1000).mul(new Decimal(3).pow(new Decimal(x).mul(3))))},
             display(){ return "Fabricates Energy based on collectable Energy " + format(tmp[this.layer].buyables[this.id].effect)+"x being generated currently"+ "<br>cost:" + this.cost()},
             canAfford() {return player[this.layer].points.gte(this.cost())},
             effect(x) {return new Decimal(x).pow(.4).div(5)},
@@ -157,7 +157,7 @@ addLayer("p", {
         },
         18: {
             cost(x){ 
-                return new Decimal(new Decimal(250000).mul(new Decimal(5).pow(new Decimal(x).mul(2)))).pow(1.2)
+                return new Decimal(new Decimal(100000).mul(new Decimal(5).pow(new Decimal(x).mul(2))))
             },
             display() { return "Fabricates Energy based on collectable Energy " + format(tmp[this.layer].buyables[this.id].effect)+"x being generated currently"+"<br>cost: "+ this.cost()},
             canAfford(){ return player[this.layer].points.gte(this.cost())},
@@ -187,10 +187,10 @@ addLayer("p", {
             },
         },
         2:{
-            requirementDescription: "5e10 Energy - Electromagnetic Force",
-            effectDescription: "Decreases the cost requirement for matter",
+            requirementDescription: "5e12 Energy - Electromagnetic Force",
+            effectDescription: "Decreases the cost requirement for Matter",
             done(){
-                return player[this.layer].points.gte(5e10)
+                return player[this.layer].points.gte(5e12)
             },
         },
         3:{
