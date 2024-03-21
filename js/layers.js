@@ -18,6 +18,8 @@ addLayer("p", {
         if (hasUpgrade('p', 13)) mult = mult.times(upgradeEffect('p', 13)) 
         if (hasMilestone("f", 1)) mult = mult.times(player.f.points.pow(.67))
         if (hasMilestone('p', 1)) mult = mult.times(1.1)
+        if (hasMilestone('p', 6)) mult = mult.times(new Decimal(2).pow(.5))
+        if (hasMilestone('p', 7)) mult = mult.pow(1.05)
         return mult
     },
 
@@ -78,7 +80,7 @@ addLayer("p", {
         },
         23:{
             title: "4 universal forces",
-            description: "unlocks milestones for this layer",
+            description: "unlocks milestones and forces for this layer",
             cost: new Decimal(250)
         },  
 
@@ -146,7 +148,7 @@ addLayer("p", {
             cost(x) { return new Decimal(new Decimal(1000).mul(new Decimal(3).pow(new Decimal(x).mul(3))))},
             display(){ return "Fabricates Energy based on collectable Energy " + format(tmp[this.layer].buyables[this.id].effect)+"x being generated currently"+ "<br>cost:" + this.cost()},
             canAfford() {return player[this.layer].points.gte(this.cost())},
-            effect(x) {return new Decimal(x).pow(.4).div(5)},
+            effect(x) {return new Decimal(x).pow(.4).div(7)},
             buy() {
                 player[this.layer].points = player[this.layer].points.sub(this.cost())
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -161,7 +163,7 @@ addLayer("p", {
             },
             display() { return "Fabricates Energy based on collectable Energy " + format(tmp[this.layer].buyables[this.id].effect)+"x being generated currently"+"<br>cost: "+ this.cost()},
             canAfford(){ return player[this.layer].points.gte(this.cost())},
-            effect(x){ return new Decimal(x).pow(.67).div(5)},
+            effect(x){ return new Decimal(x).pow(.5).div(4)},
             buy(){
                 player[this.layer].points = player[this.layer].points.sub(this.cost())
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -174,7 +176,7 @@ addLayer("p", {
     milestones:{
         0: {
             requirementDescription: "500 Energy - Weak Force",
-            effectDescription: "Virtual Particle gain ^1.1",
+            effectDescription: "Virtual Particle gain ^1.05",
             done(){
                 return player[this.layer].points.gte(500)
             },
@@ -186,6 +188,7 @@ addLayer("p", {
                 return player[this.layer].points.gte(100000)
             },
         },
+
         2:{
             requirementDescription: "5e12 Energy - Electromagnetic Force",
             effectDescription: "Decreases the cost requirement for Matter",
@@ -193,11 +196,44 @@ addLayer("p", {
                 return player[this.layer].points.gte(5e12)
             },
         },
+
         3:{
             requirementDescription: "1e21 Energy - Gravitational Force",
             effectDescription: "Unlocks a new layer",
             done(){
                 return player[this.layer].points.gte(1e21)
+            },
+        },
+
+        4:{
+            requirementDescription: "1000 Energy",
+            effectDescription: "Increases virtual particle gain by 1.25x",
+            done(){
+                return player[this.layer].points.gte(1000)
+            },
+        },
+
+        5:{
+            requirementDescription: "50000 Energy",
+            effectDescription: "increases virtual particle gain by ^1.14",
+            done(){
+                return player[this.layer].points.gte(50000)
+            },
+        },
+
+        6:{
+            requirementDescription: "10000000 Energy",
+            effectDescription: "Increases Energy gain by 1.14x",
+            done(){
+                return player[this.layer].points.gte(10000000)
+            },
+        },
+
+        7:{
+            requirementDescription: "1e10 Energy",
+            effectDescription: "Increases Energy gain by ^1.05",
+            done(){
+                return player[this.layer].points.gte(1e10)
             },
         },
     },
@@ -215,13 +251,27 @@ addLayer("p", {
                 ]
             },
 
+            "Forces":{
+                unlocked: () => hasUpgrade('p', 23),
+                content: [
+                    ["blank", "16px"],
+                    ["row",[["milestone", 0]]],
+                    ["row",[["milestone", 1]]],
+                    ["row",[["milestone", 2]]],
+                    ["row",[["milestone", 3]]],
+                ]
+            },
+
             "Milestones":{
                 unlocked: () => hasUpgrade('p', 23),
                 content: [
                     ["blank", "16px"],
-                    "milestones"
-                ]
+                    ["row", [["milestone", 4]]],
+                    ["row", [["milestone", 5]]],
+                    ["row", [["milestone", 6]]],
+                    ["row", [["milestone", 7]]],
 
+                ]
             },
             "Fabricators": {
                 unlocked: () => hasUpgrade('p', 21),
@@ -329,7 +379,7 @@ addLayer("f", {
             cost(x){return new Decimal(x).add(x.mul(2)).add(1)},
             display(){return "Increases Virtual Particle gain by amount owned. " +"<br>" + format(tmp[this.layer].buyables[this.id].effect)+"x boost currently"+"<br>cost: "+ this.cost()},
             canAfford(){return player[this.layer].points.gte(this.cost())},
-            effect(x){return new Decimal(x).add(1)},
+            effect(x){return new Decimal(x).times(1.5)},
             buy(){
                 player[this.layer].points = player[this.layer].points.sub(this.cost())
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -342,7 +392,7 @@ addLayer("f", {
             cost(x){return new Decimal(x).add(x.mul(2)).add(1)},
             display(){return "Increases Virctual Particle gain by amount owned. " + "<br> ^" +format(tmp[this.layer].buyables[this.id].effect)+" boost currently"+"<br>cost: "+ this.cost()},
             canAfford(){return player[this.layer].points.gte(this.cost())},
-            effect(x){return new Decimal(x).div(25).add(1)},
+            effect(x){return new Decimal(x).div(20).add(1.1)},
             buy(){
                 player[this.layer].points = player[this.layer].points.sub(this.cost())
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -354,7 +404,7 @@ addLayer("f", {
             cost(x){return new Decimal(x).mul(3).add(5)},
             display(){return "Increases passive Energy gain by amount owned. " + "<br>" +format(tmp[this.layer].buyables[this.id].effect)+"x boost currently"+"<br>cost: "+ this.cost()},
             canAfford(){return player[this.layer].points.gte(this.cost())},
-            effect(x){return new Decimal(x.div(33)).add(1)},
+            effect(x){return new Decimal(x.div(25)).add(1)},
             buy(){
                 player[this.layer].points = player[this.layer].points.sub(this.cost())
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -365,7 +415,7 @@ addLayer("f", {
             cost(x){return new Decimal(x).mul(3).add(5)},
             display(){return "Increases passive Energy gain by amount owned. " + "<br> ^" +format(tmp[this.layer].buyables[this.id].effect)+" boost currently"+"<br>cost: "+ this.cost()},
             canAfford(){return player[this.layer].points.gte(this.cost())},
-            effect(x){return new Decimal(x).div(50).add(1)},
+            effect(x){return new Decimal(x).div(45).add(1)},
             buy(){
                 player[this.layer].points = player[this.layer].points.sub(this.cost())
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
