@@ -364,7 +364,7 @@ addLayer("f", {
 
     buyables:{
         11:{
-            cost(x){return new Decimal(x).add(x.mul(2)).add(1)},
+            cost(x){return new Decimal(x).add(2)},
             display(){return "Increases Virtual Particle gain by amount owned. " +"<br>" + format(tmp[this.layer].buyables[this.id].effect)+"x boost currently"+"<br>cost: "+ this.cost()},
             canAfford(){return player[this.layer].points.gte(this.cost())},
             effect(x){return new Decimal(x).times(1.5)},
@@ -377,7 +377,7 @@ addLayer("f", {
             },
         },  
         12:{
-            cost(x){return new Decimal(x).add(x.mul(2)).add(1)},
+            cost(x){return new Decimal(x).add(2)},
             display(){return "Increases Virctual Particle gain by amount owned. " + "<br> ^" +format(tmp[this.layer].buyables[this.id].effect)+" boost currently"+"<br>cost: "+ this.cost()},
             canAfford(){return player[this.layer].points.gte(this.cost())},
             effect(x){return new Decimal(x).div(20).add(1.1)},
@@ -389,10 +389,10 @@ addLayer("f", {
             title(){return format(getBuyableAmount(this.layer, this.id), 0) + " Hydrogen 2 (Deuterium)"},
         },
         13:{
-            cost(x){return new Decimal(x).mul(3).add(5)},
+            cost(x){return new Decimal(x).add(5)},
             display(){return "Increases passive Energy gain by amount owned. " + "<br>" +format(tmp[this.layer].buyables[this.id].effect)+"x boost currently"+"<br>cost: "+ this.cost()},
             canAfford(){return player[this.layer].points.gte(this.cost())},
-            effect(x){return new Decimal(x.div(25)).add(1)},
+            effect(x){return new Decimal(x.div(10)).add(1)},
             buy(){
                 player[this.layer].points = player[this.layer].points.sub(this.cost())
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -400,7 +400,7 @@ addLayer("f", {
             title(){return format(getBuyableAmount(this.layer, this.id), 0) + " Helium 2"},
         },
         14:{
-            cost(x){return new Decimal(x).mul(3).add(5)},
+            cost(x){return new Decimal(x).add(5)},
             display(){return "Increases passive Energy gain by amount owned. " + "<br> ^" +format(tmp[this.layer].buyables[this.id].effect)+" boost currently"+"<br>cost: "+ this.cost()},
             canAfford(){return player[this.layer].points.gte(this.cost())},
             effect(x){return new Decimal(x).div(45).add(1)},
