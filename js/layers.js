@@ -87,7 +87,7 @@ addLayer("p", {
             description: "further increases virtual particle gain by energy",
             cost: new Decimal(75),
             effect(){
-                return player[this.layer].points.add(1).pow(.25).div(1.5)
+                return player[this.layer].points.pow(.25).div(1.5).add(1)
             },
             effectDisplay() {return format(upgradeEffect(this.layer, this.id))+'x'},
         },
