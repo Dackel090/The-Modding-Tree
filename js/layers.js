@@ -17,7 +17,7 @@ addLayer("p", {
         mult = new Decimal(1)
         if (hasUpgrade('p', 13)) mult = mult.times(upgradeEffect('p', 13)) 
         if (hasMilestone("f", 1)) mult = mult.times(player.f.points.pow(.67))
-        if (hasMilestone('p', 1)) mult = mult.times(1.1)
+        if (hasUpgrade('p', 31)) mult = mult.times(1.1)
         if (hasMilestone('p', 6)) mult = mult.times(new Decimal(2).pow(.5))
         if (hasMilestone('p', 7)) mult = mult.pow(1.05)
         return mult
@@ -126,6 +126,29 @@ addLayer("p", {
             effectDisplay(){return format(upgradeEffect(this.layer, this.id))+"x"},
         },
 
+        30: {
+            title: "Weak Force",
+            description: "Virtual Particle gain ^1.05",
+            cost: new Decimal(500)
+        },
+        31:{
+            title: "Strong Force",
+            description: "Increases Energy gain by 1.1x",
+            cost: new Decimal(100000)
+        },
+
+        32:{
+            title: "Electromagnetic Force",
+            description: "Decreases the cost requirement for Matter",
+            cost: new Decimal(5e10)
+        },
+
+        33:{
+            title: "Gravitational Force",
+            description: "Unlocks a new layer",
+            cost: new Decimal(1e21)
+        },
+
     },
 
     buyables: {
@@ -174,36 +197,7 @@ addLayer("p", {
         },
     },
     milestones:{
-        0: {
-            requirementDescription: "500 Energy - Weak Force",
-            effectDescription: "Virtual Particle gain ^1.05",
-            done(){
-                return player[this.layer].points.gte(500)
-            },
-        },
-        1:{
-            requirementDescription: "100000 Energy - Strong Force",
-            effectDescription: "Increases Energy gain",
-            done(){
-                return player[this.layer].points.gte(100000)
-            },
-        },
 
-        2:{
-            requirementDescription: "5e12 Energy - Electromagnetic Force",
-            effectDescription: "Decreases the cost requirement for Matter",
-            done(){
-                return player[this.layer].points.gte(5e12)
-            },
-        },
-
-        3:{
-            requirementDescription: "1e21 Energy - Gravitational Force",
-            effectDescription: "Unlocks a new layer",
-            done(){
-                return player[this.layer].points.gte(1e21)
-            },
-        },
 
         4:{
             requirementDescription: "1000 Energy",
@@ -255,10 +249,7 @@ addLayer("p", {
                 unlocked: () => hasUpgrade('p', 23),
                 content: [
                     ["blank", "16px"],
-                    ["row",[["milestone", 0]]],
-                    ["row",[["milestone", 1]]],
-                    ["row",[["milestone", 2]]],
-                    ["row",[["milestone", 3]]],
+                    ["row",[["upgrade", 30], ["upgrade", 31], ["upgrade", 32], ["upgrade", 33]]],
                 ]
             },
 
@@ -266,10 +257,7 @@ addLayer("p", {
                 unlocked: () => hasUpgrade('p', 23),
                 content: [
                     ["blank", "16px"],
-                    ["row", [["milestone", 4]]],
-                    ["row", [["milestone", 5]]],
-                    ["row", [["milestone", 6]]],
-                    ["row", [["milestone", 7]]],
+                    "milestones"
 
                 ]
             },
@@ -314,8 +302,8 @@ addLayer("f", {
     exponent: 1.1, // Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
-        if (hasMilestone('p', 2)) mult = mult.times(.9)
-        if (hasMilestone('g', 0)) mult = mult.times(.9)
+        if (hasUpgrade('p', 32)) mult = mult.times(.9)
+        if (hasMilestone('g', 1)) mult = mult.times(.9)
         if (hasUpgrade('g', 12)) mult = mult.times(upgradeEffect("g", 12))
         return mult
     },
@@ -485,7 +473,7 @@ addLayer("g", {
     ],
 
     layerShown(){
-        return hasMilestone('p', 3) || this.layer.points > 0 || hasMilestone(this.layer, 0)
+        return hasUpgrade('p', 33) || this.layer.points > 0 || hasMilestone(this.layer, 0)
     },
     branches:[['p', 1]],
 
@@ -515,14 +503,14 @@ addLayer("g", {
     milestones:{
         0: {
             requirementDescription: "1 Gravity",
-            effectDescription: "Decreases Matter cost",
+            effectDescription: "Keep Energy upgrades on Gravity reset",
             done(){
                 return player[this.layer].points.gte(1)
             },
         },
         1:{
             requirementDescription: "100 Gravity",
-            effectDescription: "Keep Energy upgrades on Gravity reset",
+            effectDescription: "Reduces the cost for Matter",
             done(){
                 return player[this.layer].points.gte(100)
             },
