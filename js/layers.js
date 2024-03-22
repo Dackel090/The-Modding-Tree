@@ -449,7 +449,7 @@ addLayer("g", {
     symbol: "g",
     position: 2,
     startData() { return {
-        unlocked: true,
+        unlocked: false,
 		points: new Decimal(0),
     }},
     color: "#452a85",
@@ -472,9 +472,9 @@ addLayer("g", {
         {key: "g", description: "G: Reset for gravity", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
 
-   // layerShown(){
-     //   return hasUpgrade('p', 33) || this.layer.points > 0 || hasMilestone(this.layer, 0)
-   // },
+    layerShown(){
+        return hasUpgrade('p', 33) || this.layer.points > 0 || hasMilestone(this.layer, 0)
+    },
     branches:[['p', 1]],
 
     upgrades: {
