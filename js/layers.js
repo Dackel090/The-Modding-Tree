@@ -461,6 +461,7 @@ addLayer("g", {
     exponent: .2, // Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
+        if (hasMilestone('g', 2)) mult = mult.times(1.1)
         return mult
     },
 
@@ -481,9 +482,9 @@ addLayer("g", {
         11:{
             title: "gravity well",
             description: "increases virtual particle gain by gravity",
-            cost: new Decimal(100),  
+            cost: new Decimal(1),  
             effect() {
-                return player[this.layer].points.add(1).pow(0.1)
+                return player[this.layer].points.add(1).pow(0.25)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" },
         },
@@ -491,15 +492,42 @@ addLayer("g", {
         12:{
             title: "gravitational waves",
             description: "reduces the cost of matter by points",
-            cost: new Decimal(10000),
+            cost: new Decimal(1000),
             effect(){
                 return new Decimal(1).sub(new Decimal(player.points.pow(.002)).sub(1))
             },
             effectDisplay(){return format(upgradeEffect(this.layer, this.id))+"x"},
         },
+        13:{
+            title: "gravitational singularity",
+            description: "increases virtual particle gain by virtual particles (again again)",
+            cost: new Decimal(2500),
+            effect(){
+                return new Decimal(player.p.points).add(1).pow(.33)
+            },
+        },
+        14:{
+            title: "gravitational systems",
+            description: "unlocks gravitational systems",
+            cost: new Decimal(10000)
+        },
              
     },
-
+    buyables:{
+        11:{
+            cost(x){return new Decimal(1).add(new Decimal(2).pow(.5).times(x))},
+            display(){return "Increases Virtual Particle gain by amount owned. " +"<br>" + format(tmp[this.layer].buyables[this.id].effect)+"x boost currently"+"<br>cost: "+ this.cost()},
+            canAfford(){return player[this.layer].points.gte(this.cost())},
+            effect(x){return new Decimal(x).mul(.5)},
+            buy(){
+                player[this.layer].points = player[this.layer].points.sub(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + " Hydrogen 1"
+            },
+        },  
+    },
     milestones:{
         0: {
             requirementDescription: "1 Gravity",
@@ -509,10 +537,17 @@ addLayer("g", {
             },
         },
         1:{
-            requirementDescription: "100 Gravity",
+            requirementDescription: "10 Gravity",
             effectDescription: "Reduces the cost for Matter",
             done(){
-                return player[this.layer].points.gte(100)
+                return player[this.layer].points.gte(10)
+            },
+        },
+        2:{
+            requirementDescription: "1000 Gravity",
+            effectDescription: "Increases Gravity gain by 1.1x",
+            done(){
+                return player[this.layer].points.gte(1000)
             },
         },
     },
@@ -522,7 +557,7 @@ addLayer("g", {
             "Upgrades": {
                 content: [
                     ["blank", "16px"],
-                    ["row",[['upgrade', 11], ['upgrade', 12]]],
+                    ["row",[['upgrade', 11], ['upgrade', 12], ["upgrade", 13]]],
                     ["blank", "16px"],
                 ]
             },
