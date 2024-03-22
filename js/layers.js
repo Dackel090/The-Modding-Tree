@@ -367,7 +367,7 @@ addLayer("f", {
             cost(x){return new Decimal(x).add(2)},
             display(){return "Increases Virtual Particle gain by amount owned. " +"<br>" + format(tmp[this.layer].buyables[this.id].effect)+"x boost currently"+"<br>cost: "+ this.cost()},
             canAfford(){return player[this.layer].points.gte(this.cost())},
-            effect(x){return new Decimal(x).times(1.5)},
+            effect(x){return new Decimal(x).times(1.5).add(1)},
             buy(){
                 player[this.layer].points = player[this.layer].points.sub(this.cost())
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -380,7 +380,7 @@ addLayer("f", {
             cost(x){return new Decimal(x).add(2)},
             display(){return "Increases Virctual Particle gain by amount owned. " + "<br> ^" +format(tmp[this.layer].buyables[this.id].effect)+" boost currently"+"<br>cost: "+ this.cost()},
             canAfford(){return player[this.layer].points.gte(this.cost())},
-            effect(x){return new Decimal(x).div(20).add(1.1)},
+            effect(x){return new Decimal(x).div(20).add(1)},
             buy(){
                 player[this.layer].points = player[this.layer].points.sub(this.cost())
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -449,7 +449,7 @@ addLayer("g", {
     symbol: "g",
     position: 2,
     startData() { return {
-        unlocked: false,
+        unlocked: true,
 		points: new Decimal(0),
     }},
     color: "#452a85",
@@ -472,9 +472,9 @@ addLayer("g", {
         {key: "g", description: "G: Reset for gravity", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
 
-    layerShown(){
-        return hasUpgrade('p', 33) || this.layer.points > 0 || hasMilestone(this.layer, 0)
-    },
+   // layerShown(){
+     //   return hasUpgrade('p', 33) || this.layer.points > 0 || hasMilestone(this.layer, 0)
+   // },
     branches:[['p', 1]],
 
     upgrades: {
