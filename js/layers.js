@@ -89,7 +89,7 @@ addLayer("p", {
             description: "further increases virtual particle gain by energy",
             cost: new Decimal(50),
             effect(){
-                return player[this.layer].points.pow(.25).div(1.5).add(1)
+                return player[this.layer].points.pow(.4).div(1.5).add(1)
             },
             effectDisplay() {return format(upgradeEffect(this.layer, this.id))+'x'},
         },
@@ -339,24 +339,24 @@ addLayer("f", {
             },
         },
         2:{
-            requirementDescription: "10 Matter",
+            requirementDescription: "8 Matter",
             effectDescription: "Increases Virtual Particle gain by amount of Fabricators owned",
             done(){
-                return player[this.layer].points.gte(10)
+                return player[this.layer].points.gte(8)
             },
         },
         3:{
-            requirementDescription: "20 Matter",
+            requirementDescription: "12 Matter",
             effectDescription: "Unlocks basic elements",
             done(){
-                return player[this.layer].points.gte(20)
+                return player[this.layer].points.gte(12)
             },
         },
         4:{
-            requirementDescription: "35 Matter",
+            requirementDescription: "25 Matter",
             effectDescription: "Keep Energy upgrades on collecting energy",
             done(){
-                return player[this.layer].points.gte(35)
+                return player[this.layer].points.gte(25)
             },
         },
     
