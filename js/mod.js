@@ -18,11 +18,13 @@ let VERSION = {
 }
 
 let changelog = `<h1>Changelog:</h1><br>
-	<h3>v0.2.0</h3><br>
-		- expansion and formation are completed.<br>
-		- formation layer milestone 4 bug fixed. <br>
-		- gravity layer added, not completed. <br>
-		- Added everything.`
+	<h3>v0.2.1</h3><br>
+		- expansion and formation are completed, actually this time.<br>
+		- balancing changes to make the game less grindy. <br>
+			-reworked formation milestones. <br>
+			-reworked force system in expansion. <br>
+			-tweaked values in fabricators and basic elements to make them better and more fair. <br>
+		-fixed a bug that would cause 0 virtual particle gain/sec`
 
 let winText = `Congratulations! You have reached the end and beaten this game, but for now...`
 

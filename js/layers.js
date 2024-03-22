@@ -168,7 +168,7 @@ addLayer("p", {
             }
         },
         17: {
-            cost(x) { return new Decimal(new Decimal(1000).mul(new Decimal(3).pow(new Decimal(x).mul(3))))},
+            cost(x) { return new Decimal(new Decimal(1000).mul(new Decimal(3).pow(new Decimal(x))))},
             display(){ return "Fabricates Energy based on collectable Energy " + format(tmp[this.layer].buyables[this.id].effect)+"x being generated currently"+ "<br>cost:" + this.cost()},
             canAfford() {return player[this.layer].points.gte(this.cost())},
             effect(x) {return new Decimal(x).pow(.4).div(7)},
@@ -182,7 +182,7 @@ addLayer("p", {
         },
         18: {
             cost(x){ 
-                return new Decimal(new Decimal(100000).mul(new Decimal(5).pow(new Decimal(x).mul(2))))
+                return new Decimal(new Decimal(100000).mul(new Decimal(5).pow(new Decimal(x))))
             },
             display() { return "Fabricates Energy based on collectable Energy " + format(tmp[this.layer].buyables[this.id].effect)+"x being generated currently"+"<br>cost: "+ this.cost()},
             canAfford(){ return player[this.layer].points.gte(this.cost())},
@@ -392,7 +392,7 @@ addLayer("f", {
             cost(x){return new Decimal(x).add(5)},
             display(){return "Increases passive Energy gain by amount owned. " + "<br>" +format(tmp[this.layer].buyables[this.id].effect)+"x boost currently"+"<br>cost: "+ this.cost()},
             canAfford(){return player[this.layer].points.gte(this.cost())},
-            effect(x){return new Decimal(x.div(10)).add(1)},
+            effect(x){return new Decimal(x.div(7)).add(1)},
             buy(){
                 player[this.layer].points = player[this.layer].points.sub(this.cost())
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -403,7 +403,7 @@ addLayer("f", {
             cost(x){return new Decimal(x).add(5)},
             display(){return "Increases passive Energy gain by amount owned. " + "<br> ^" +format(tmp[this.layer].buyables[this.id].effect)+" boost currently"+"<br>cost: "+ this.cost()},
             canAfford(){return player[this.layer].points.gte(this.cost())},
-            effect(x){return new Decimal(x).div(45).add(1)},
+            effect(x){return new Decimal(x).div(40).add(1)},
             buy(){
                 player[this.layer].points = player[this.layer].points.sub(this.cost())
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
