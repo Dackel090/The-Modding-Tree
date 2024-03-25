@@ -629,6 +629,6 @@ addLayer("g", {
     layerShown(){
         return hasUpgrade('g', 15) || this.layer.points > 0
     },
-    branches:[['g', 1], ['p', 1], ['f', 1]]
+    branches:[['g', 1], ['p', 1], ['f', 1]],
 
 })
