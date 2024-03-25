@@ -599,3 +599,49 @@ addLayer("g", {
 
 
 })
+
+addLayer("g", {
+    name: "universal tethers",
+    symbol: "ut",
+    position: 3,
+    startData() { return {
+        unlocked: true,
+		points: new Decimal(0),
+    }},
+    color: "#452a85",
+    requires: new Decimal(1000), // Can be a function that takes requirement increases into account
+    resource: "dark matter", // Name of prestige currency
+    baseResource: "gravity", // Name of resource prestige is based on
+    baseAmount() {return player.g.points}, // Get the current amount of baseResource
+    type: "static", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
+    exponent: 1, // Prestige currency exponent
+    gainMult() { // Calculate the multiplier for main currency from bonuses
+        mult = new Decimal(1)
+        return mult
+    },
+
+    gainExp() { // Calculate the exponent on main currency from bonuses
+        return new Decimal(1)
+    },
+    row: 0, // Row the layer is in on the tree (0 is the first row)
+    hotkeys: [
+        {key: "u", description: "U: Reset for dark matter", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+    ],
+
+    layerShown(){
+        return true
+    },
+    branches:[['p', 1], ['f', 1], ['g', 1]
+    
+    ],
+
+    tabFormat: [
+        "main-display",
+        "prestige-button",
+        ["blank", "25px"],
+        ["blank", "15px"],
+        ["microtabs", "stuff"],
+        ["blank", "35px"],
+    ],
+
+})
