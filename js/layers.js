@@ -635,6 +635,23 @@ addLayer("g", {
     
     ],
 
+    upgrades: {
+        11:{
+            title: "test",
+            description: "test",
+            cost: new Decimal(0),
+        },
+    },
+
+    microtabs:{
+        "Upgrades": {
+            content: [
+                ["blank", "16px"],
+                "upgrades",
+            ]
+        },
+    },
+
     tabFormat: [
         "main-display",
         "prestige-button",
