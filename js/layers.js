@@ -353,10 +353,10 @@ addLayer("f", {
             },
         },
         4:{
-            requirementDescription: "25 Matter",
+            requirementDescription: "20 Matter",
             effectDescription: "Keep Energy upgrades on collecting energy",
             done(){
-                return player[this.layer].points.gte(25)
+                return player[this.layer].points.gte(20)
             },
         },
     
@@ -505,12 +505,18 @@ addLayer("g", {
             effect(){
                 return new Decimal(player.p.points).add(1).pow(.25)
             },
+            effectDisplay(){return format(upgradeEffect(this.layer, this.id))+"x"},
         },
         14:{
             title: "gravitational systems",
             description: "unlocks gravitational systems",
-            cost: new Decimal(10000)
+            cost: new Decimal(5000)
         },
+        15:{
+            title: "dark matter",
+            description: "unlocks universal tethers",
+            cost: new Decimal(50)
+        }
              
     },
     buyables:{
@@ -524,7 +530,7 @@ addLayer("g", {
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
             },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + " Hydrogen Gas Cloud"
+                return format(getBuyableAmount(this.layer, this.id), 0) + " Hydrogen Gas Clouds"
             },
         },  
     },
@@ -557,7 +563,8 @@ addLayer("g", {
             "Upgrades": {
                 content: [
                     ["blank", "16px"],
-                    ["row",[['upgrade', 11], ['upgrade', 12], ["upgrade", 13]]],
+                    ["row",[['upgrade', 11], ["upgrade", 15], ['upgrade', 12], ["upgrade", 13]]],
+                    ["row", [["upgrade", 14]]],
                     ["blank", "16px"],
                 ]
             },
@@ -566,6 +573,13 @@ addLayer("g", {
                     ["blank", "16px"],
                     "milestones"
 
+                ]
+            },
+
+            "Systems":{
+                content: [
+                    ["blank", "16px"],
+                    "buyables"
                 ]
             },
         },
@@ -581,5 +595,40 @@ addLayer("g", {
         ["blank", "35px"],
     ],
 
+
+})
+
+addLayer("g", {
+    name: "universal tethers",
+    symbol: "ut",
+    position: 2,
+    startData() { return {
+        unlocked: false,
+		points: new Decimal(0),
+    }},
+    color: "#3A323F",
+    requires: new Decimal(200), // Can be a function that takes requirement increases into account
+    resource: "dark matter", // Name of prestige currency
+    baseResource: "gravity", // Name of resource prestige is based on
+    baseAmount() {return player.g.points}, // Get the current amount of baseResource
+    type: "static", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
+    exponent: 1, // Prestige currency exponent
+    gainMult() { // Calculate the multiplier for main currency from bonuses
+        mult = new Decimal(1)
+        return mult
+    },
+
+    gainExp() { // Calculate the exponent on main currency from bonuses
+        return new Decimal(1)
+    },
+    row: 0.5, // Row the layer is in on the tree (0 is the first row)
+    hotkeys: [
+        {key: "u", description: "U: Reset for Dark Matter", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+    ],
+
+    layerShown(){
+        return hasUpgrade('g', 15) || this.layer.points > 0
+    },
+    branches:[['g', 1], ['p', 1], ['f', 1]]
 
 })
