@@ -600,7 +600,7 @@ addLayer("g", {
 
 })
 
-addLayer("g", {
+addLayer("ut", {
     name: "universal tethers",
     symbol: "ut",
     position: 3,
