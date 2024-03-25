@@ -563,7 +563,7 @@ addLayer("g", {
             "Upgrades": {
                 content: [
                     ["blank", "16px"],
-                    ["row",[['upgrade', 11], ["upgrade", 15], ['upgrade', 12], ["upgrade", 14]]],
+                    ["row",[['upgrade', 11], ["upgrade", 15], ['upgrade', 14], ["upgrade", 12]]],
                     ["row", [["upgrade", 13]]],
                     ["blank", "16px"],
                 ]
