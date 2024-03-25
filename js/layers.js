@@ -510,7 +510,7 @@ addLayer("g", {
         14:{
             title: "gravitational systems",
             description: "unlocks gravitational systems",
-            cost: new Decimal(5000)
+            cost: new Decimal(750)
         },
         15:{
             title: "dark matter",
@@ -563,8 +563,8 @@ addLayer("g", {
             "Upgrades": {
                 content: [
                     ["blank", "16px"],
-                    ["row",[['upgrade', 11], ["upgrade", 15], ['upgrade', 12], ["upgrade", 13]]],
-                    ["row", [["upgrade", 14]]],
+                    ["row",[['upgrade', 11], ["upgrade", 15], ['upgrade', 12], ["upgrade", 14]]],
+                    ["row", [["upgrade", 13]]],
                     ["blank", "16px"],
                 ]
             },
@@ -577,6 +577,8 @@ addLayer("g", {
             },
 
             "Systems":{
+                unlocked: () => hasUpgrade('g', 14),
+
                 content: [
                     ["blank", "16px"],
                     "buyables"
